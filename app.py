@@ -13,32 +13,52 @@ app.config.suppress_callback_exceptions=True
 
 
 #Top menu, items get from all pages registered with plugin.pages
-navbar = dbc.NavbarSimple([
-
-    dbc.NavItem(dbc.NavLink( "Inicio", href="/")),
-    dbc.DropdownMenu(
-        [
-            
-            dbc.DropdownMenuItem(page["name"], href=page["path"])
-            for page in dash.page_registry.values()
-            if page["module"] != "pages.not_found_404"
-        ],
-        nav=True,
-        label="Data Science",
-    ),
-    dbc.NavItem(dbc.NavLink("Nosotros", href="/nosotros")),
+navbar = dbc.NavbarSimple(
+    [
+    
+    dbc.NavItem(dbc.NavLink("Inicio", href="/")),
+    dbc.NavItem(dbc.NavLink( "Nosotros", href="/nosotros")),
+    #dbc.NavItem(dbc.NavLink("Partido", href="/partido"))
     ],
+
     brand="DS4A Project - Team 134",
-    color="dark",
+    color="primary",
     dark=True,
     className="mb-2",
 )
 
+
+button_group = dbc.ButtonGroup(
+    [
+        dbc.Button([
+                    'Senador'
+                ],id="btt_senador",  href="/senador"),
+        dbc.Button([
+                    'Partido'
+                ],id="btt_partido",  href="/partido"),
+        dbc.Button([
+                    'Comparar'
+                ],id="btt_comparar",  href="/partido"),
+    ],
+    vertical=True,
+)
+
 #Main layout
 app.layout = dbc.Container(
+
     [
         navbar,
-        dl.plugins.page_container,
+        dbc.Row([
+            dbc.Col([
+                button_group
+            ], md=2, lg=1),  
+            dbc.Col([
+                dl.plugins.page_container,
+            ], md=10, lg=11),
+        ]),
+    
+
+        
     ],
     className="dbc",
     fluid=True,
