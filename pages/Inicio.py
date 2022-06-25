@@ -8,15 +8,20 @@ from components.kpi.kpiplot import kpiplot
 from components.table.table import table
 from components.sampledf.model import df_costos
 from components.maps.mapsample import mapsample
-
+from data.dataframes.database import listaPartidos
+from components.plots.PartPlots import PartPlots
+from components.kpi.kpibadgeAMD import kpibadgeAMD
 
 kpi3plot = kpiplot('Total KPI', df_costos['VALUE'], 'count')
 kpi4plot = kpiplot('Total User', df_costos['VALUE'], 'count')
 
-kpi1 = kpibadge('325', 'Total kpi', 'Danger')
-kpi2 = kpibadge('1500', 'Total sales', 'Approved')
+kpi1 = kpibadgeAMD('120', 'Senador con mas procesos', 'GUSTAVO BOLIVAR MORENO')
+kpi2 = kpibadgeAMD('1500', 'Departamento con mas procesos', 'Bogota')
+
 
 mapa_ejemplo = mapsample('Mapa de ejemplo', 'id_mapa_ejemplo')
+
+imgPartido = PartPlots('Procesos por partido', listaPartidos,'PACTO HISTORICO')
 
 params1 = {
             'title': 'Users', 
@@ -30,24 +35,11 @@ layout=  dbc.Container(
     [
         dbc.Row([
             dbc.Col([
-                kpi3plot.display()
-            ], className='card'),
-              dbc.Col([
-                kpi3plot.display()
-            ], className='card'),
-             dbc.Col([
-                kpi3plot.display()
-            ], className='card'),
-             dbc.Col([
-                kpi3plot.display()
-            ], className='card')
-        ]),
-        dbc.Row([
-            dbc.Col([
-                mapa_ejemplo.display()
+                #mapa_ejemplo.display()
+                imgPartido.display()
 
 
-            ], md=8), 
+            ],id="plot-part", md=8), 
             dbc.Col([
                 dbc.Row([
                     dbc.Col([ kpi1.display()]),
