@@ -7,7 +7,7 @@ from callbacks import register_callbacks
 
 # Dash instance declaration
 app = dash.Dash(
-    __name__, plugins=[dl.plugins.pages], external_stylesheets=[dbc.themes.FLATLY], update_title='Cargando...'
+    __name__, plugins=[dl.plugins.pages], external_stylesheets=[dbc.themes.MINTY], update_title='Cargando...'
 )
 app.config.suppress_callback_exceptions=True
 
