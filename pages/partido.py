@@ -1,4 +1,5 @@
 #libraries
+from telnetlib import OUTMRK
 from dash import html
 import dash_bootstrap_components as dbc
 from dash_labs.plugins.pages import register_page
@@ -11,7 +12,7 @@ register_page(__name__, path="/partido")
 from components.maps.mapcol_departamentos import mapcol_departamentos
 
 from components.maps.mapsample import mapsample
-from data.dataframes.database import listaPartidos
+from data.dataframes.database import listaPartidos,conteoProcesos
 from components.plots.PartPlots import PartPlots
 from components.sampledf.model import df_maptest
 from components.table.table import table
@@ -64,7 +65,7 @@ layout= html.Div(
         dbc.Row([
             dbc.Col([
                 dbc.Row(html.Div(id="tag-senadores")),
-                dbc.Row(html.Div(id="tag-casos")),
+                dbc.Row(html.Div(id="tag-registros")),
         ]),dbc.Col([
                     imgPartido.display()   
         ],id="plot-part"),
@@ -75,7 +76,7 @@ layout= html.Div(
     ],className='container-fluid',style={'margin':'auto','width':'100%'}
 )
 
-
+# Callback para el filtrado de la lista de senadores
 @callback(
 Output("id_selector_senador","options"),
 Input("id_selector_partido","value")
@@ -84,7 +85,7 @@ def senator_dropdown(partido):
     df_filtro = listaPartidos[listaPartidos['Partido']==partido]['Senadores'].unique()
     return [{"label": i, "value": i} for i in df_filtro]
 
-
+# Callback para el conteo de senadores por partido
 @callback(
     Output("tag-senadores","children"),
     Input("id_selector_partido","value")
@@ -93,6 +94,19 @@ def partyMembers(partido):
     cuenta = listaPartidos[listaPartidos['Partido']==partido]['Senadores'].count()
     kpi = kpibadge(cuenta, 'No. Senadores', 'success')
     return [kpi.display()]
+
+# Callback para el conteo de registros por partido
+@callback(
+    Output("tag-registros","children"),
+    Input("id_selector_partido","value")
+)
+def regCount(partido:str):
+    party = partido
+    cuenta = conteoProcesos[conteoProcesos['PARTIDO']==party][['CANTIDAD_PROCESOS_PRIVADOS','CANTIDAD_PROCESOS_PUBLICOS']].sum()
+    cuenta = sum(cuenta)
+    kpi = kpibadge(cuenta, 'No. Procesos', 'success')
+    return [kpi.display()]
+    
 
 @callback(
 Output("plot-part","children"),
