@@ -21,3 +21,10 @@ SELECT * FROM DATA_SENADORES_PARTIDO_EXPORT
 conteoProcesos = pd.read_sql_query("""
 SELECT * FROM VW_PERSON_CONTEO_DE_PROCESOS
 """,conn)
+
+depPartidos = pd.read_sql_query("""
+SELECT * FROM VW_PARTIDO_DEPARTAMENTO_CONTEO_DE_CASOS
+""",conn)
+
+depPartidos = depPartidos.rename(columns={"CODIGO_DEPARTAMENTO":"COD_DPTO"})
+

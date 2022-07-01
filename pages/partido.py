@@ -12,7 +12,7 @@ register_page(__name__, path="/partido")
 from components.maps.mapcol_departamentos import mapcol_departamentos
 
 from components.maps.mapsample import mapsample
-from data.dataframes.database import listaPartidos,conteoProcesos
+from data.dataframes.database import listaPartidos,conteoProcesos,depPartidos
 from components.plots.PartPlots import PartPlots
 from components.sampledf.model import df_maptest
 from components.table.table import table
@@ -21,7 +21,7 @@ from components.kpi.kpibadge import kpibadge
 kpi1 = kpibadge('1500', 'Departamento con mas procesos', 'Bogota')
 
 
-mapa_colombia_departamentos = mapcol_departamentos('Mapa Departamentos Colombia', 'div_municipios_fig2',df_maptest)
+mapa_colombia_departamentos = mapcol_departamentos('Mapa Departamentos Colombia', 'div_municipios_fig2',depPartidos)
 
 imgPartido = PartPlots('Procesos por partido', listaPartidos,'PACTO HISTORICO')
 
@@ -70,7 +70,7 @@ layout= html.Div(
                     imgPartido.display()   
         ],id="plot-part"),
         dbc.Col([
-                    mapa_colombia_departamentos.display()   
+                html.Div(id="map-partidos")  
         ])
         ])
     ],className='container-fluid',style={'margin':'auto','width':'100%'}
@@ -106,6 +106,20 @@ def regCount(partido:str):
     cuenta = sum(cuenta)
     kpi = kpibadge(cuenta, 'No. Procesos', 'success')
     return [kpi.display()]
+
+@callback(
+    Output("map-partidos","children"),
+    Input("id_selector_partido","value")
+)
+def mapSen(partido:str):
+    df = mapa_colombia_departamentos.df
+    df_filtrado = df[df['PARTIDO']==partido]
+    df_filtrado['COUNT'] = df_filtrado['CANTIDAD_PROCESOS_PUBLICOS']+df_filtrado['CANTIDAD_PROCESOS_PRIVADOS']
+    df_filtrado = df_filtrado[['DEPARTAMENTO','COUNT','COD_DPTO']]
+    mapa_colombia_departamentos.df = df_filtrado
+    nuevo_mapa = mapa_colombia_departamentos.display()
+    mapa_colombia_departamentos.df = depPartidos
+    return [nuevo_mapa]
     
 
 @callback(
