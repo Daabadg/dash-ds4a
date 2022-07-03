@@ -43,7 +43,7 @@ class mapcol_departamentos:
             text=self.df.DEPARTAMENTO,
             marker_opacity=0.9, 
             marker_line_width=0.5,
-            colorbar_title = "COP",
+            colorbar_title = "COUNT",
             )
         annotations = [
             dict(
@@ -64,10 +64,11 @@ class mapcol_departamentos:
         fig.update_layout(
             geo_scope='south america',
             mapbox_style="carto-positron",
-            mapbox_zoom=5.8, 
-            mapbox_center = {"lat": 6.88970868, "lon": -74.2973328},
+            mapbox_zoom=4, 
+            mapbox_center = {"lat": 4.570868, "lon": -74.297333},
             annotations=annotations,
-            height=400),
+            #height=400
+            ),
 
         
         fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
@@ -83,7 +84,7 @@ class mapcol_departamentos:
                     dcc.Graph(figure=mapcol_departamentos.figura(self), id=self.id)
                 ])
                 
-            ]
+            ],className='card'
         )
         return layout
             

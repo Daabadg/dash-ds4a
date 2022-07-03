@@ -1,9 +1,10 @@
 #libraries
 from telnetlib import OUTMRK
+from traceback import print_tb
 from dash import html
 import dash_bootstrap_components as dbc
 from dash_labs.plugins.pages import register_page
-from dash import html , dcc, callback, Input, Output, State
+from dash import html , dcc, callback, Input, Output, State, callback_context
 from sklearn.feature_extraction import img_to_graph
 
 # dash-labs plugin call, menu name and route
@@ -11,19 +12,38 @@ register_page(__name__, path="/partido")
 
 from components.maps.mapcol_departamentos import mapcol_departamentos
 
-from components.maps.mapsample import mapsample
 from data.dataframes.database import listaPartidos,conteoProcesos,depPartidos
 from components.plots.PartPlots import PartPlots
-from components.sampledf.model import df_maptest
-from components.table.table import table
+from components.plots.piechart import piechart
 from components.kpi.kpibadge import kpibadge
+from components.plots.barPlots import barPlots
 
-kpi1 = kpibadge('1500', 'Departamento con mas procesos', 'Bogota')
+# PIECHART POR GENERO
+pieGenero = piechart("Genero",listaPartidos,"PACTO HISTORICO")
 
+# BAR PLOT DEPARTAMENTO
+barDepartamento = barPlots("Departamentos",depPartidos,"PACTO HISTORICO","DEPARTAMENTO","COUNT")
 
+# MAPA COLOMBIA
 mapa_colombia_departamentos = mapcol_departamentos('Mapa Departamentos Colombia', 'div_municipios_fig2',depPartidos)
 
-imgPartido = PartPlots('Procesos por partido', listaPartidos,'PACTO HISTORICO')
+
+#imgPartido = PartPlots('Procesos por partido', listaPartidos,'PACTO HISTORICO')
+
+# Botones para elegir graficas
+button_group_par = dbc.ButtonGroup(
+    [
+        dbc.Button([
+                    'Edad'
+                ],id="btt_edad"),
+        dbc.Button([
+                    'Genero'
+                ],id="btt_genero"),
+        dbc.Button([
+                    'Departamento'
+                ],id="btt_dpto"),
+    ],
+)
 
 layout= html.Div(
     [
@@ -41,7 +61,7 @@ layout= html.Div(
                         id="id_selector_partido",
                         options=[
                             {"label": i, "value": i} for i in listaPartidos.Partido.unique()
-                        ],multi=False, placeholder="Partido"
+                        ],value="PACTO HISTORICO",multi=False, placeholder="Partido"
                         )
                     ])
                 ]),
@@ -49,7 +69,7 @@ layout= html.Div(
                     html.Div([
                         html.Div(['Seleccione el senador'],className="mb-2 selector-label"),
                         dcc.Dropdown(
-                        id="id_selector_senador",multi=False, placeholder="Senador"
+                        id="id_selector_senador",value='GUSTAVO BOLIVAR MORENO',multi=False, placeholder="Senador"
                         )
                     ])
                 ])
@@ -66,12 +86,20 @@ layout= html.Div(
             dbc.Col([
                 dbc.Row(html.Div(id="tag-senadores")),
                 dbc.Row(html.Div(id="tag-registros")),
-        ]),dbc.Col([
-                    imgPartido.display()   
-        ],id="plot-part"),
-        dbc.Col([
-                html.Div(id="map-partidos")  
-        ])
+        ],width=2),
+            dbc.Col([
+                dbc.Row([
+                    html.Div(id="plot-part")
+                    ]),
+                dbc.Row([
+                    dbc.Col([
+                        button_group_par
+                        ],md=9)
+                        ],justify = 'center')
+                        ],width=4),
+            dbc.Col([
+                    html.Div(id="map-partidos")  
+                ],width=6)
         ])
     ],className='container-fluid',style={'margin':'auto','width':'100%'}
 )
@@ -107,6 +135,7 @@ def regCount(partido:str):
     kpi = kpibadge(cuenta, 'No. Procesos', 'success')
     return [kpi.display()]
 
+# Callback para el mapa
 @callback(
     Output("map-partidos","children"),
     Input("id_selector_partido","value")
@@ -114,24 +143,34 @@ def regCount(partido:str):
 def mapSen(partido:str):
     df = mapa_colombia_departamentos.df
     df_filtrado = df[df['PARTIDO']==partido]
-    df_filtrado['COUNT'] = df_filtrado['CANTIDAD_PROCESOS_PUBLICOS']+df_filtrado['CANTIDAD_PROCESOS_PRIVADOS']
+    #df_filtrado['COUNT'] = df_filtrado['CANTIDAD_PROCESOS_PUBLICOS']+df_filtrado['CANTIDAD_PROCESOS_PRIVADOS']
     df_filtrado = df_filtrado[['DEPARTAMENTO','COUNT','COD_DPTO']]
     mapa_colombia_departamentos.df = df_filtrado
     nuevo_mapa = mapa_colombia_departamentos.display()
     mapa_colombia_departamentos.df = depPartidos
     return [nuevo_mapa]
     
-
+# Boton de genero
 @callback(
 Output("plot-part","children"),
-Input("id_selector_partido","value")
+Input("id_selector_partido","value"),
+Input("btt_genero","n_clicks"),
+Input("btt_edad","n_clicks"),
+Input("btt_dpto","n_clicks")
 )
+def update_plot(partido,btn1,btn2,btn3):
+    changed_id = [p['prop_id'] for p in callback_context.triggered][0]
+    if 'btt_genero' in changed_id:
+        pieGenero.partido = partido
+        nuevo_plot = pieGenero.display()
+    elif 'btt_edad' in changed_id:
+        print('Button 2 was most recently clicked')
+    elif 'btt_dpto' in changed_id:
+        barDepartamento.partido = partido
+        nuevo_plot = barDepartamento.display()
+    else:
+        pieGenero.partido = partido
+        nuevo_plot = pieGenero.display()
+    return [nuevo_plot]
 
-def update_plot(partido):
-        #df_filtrado = imgPartido.df[imgPartido.df['Partido']==partido]
-        #df_filtrado = df_filtrado[df_filtrado['COUNT']]
-        imgPartido.partido = partido
-        nuevo_plot = imgPartido.display()
-        #mapa_filtrado = mapcol_departamentos('Mapa Filtrado', 'id_filtrado', df_filtrado )
-        #nuevo_mapa = mapa_filtrado.display()
-        return [nuevo_plot]
+# Boton de departamento

@@ -17,8 +17,8 @@ class kpibadge:
             [
              html.Div(self.label,className='h6'),
              html.H2(self.kpi,className='d-flex justify-content-end'),
-             dbc.Badge(self.badgetype, color=self.color, className="mr-1"),
-            ], className='card m-2'
+             #dbc.Badge(self.badgetype, color=self.color, className="mr-1"),
+            ], className='card'
         )
         return layout
   
