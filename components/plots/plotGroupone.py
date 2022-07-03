@@ -3,15 +3,16 @@ import pandas as pd
 import dash_bootstrap_components as dbc
 import plotly.express as px
 
-class PlotsGroup1:
+class plotGroupone:
     """ A class to represent plot"""
     def __init__(self,label, data_, col_gr,x,y):
         """Constructs all the attributes for kpiplot class"""
         self.label = label                                          #Title of graph
         self.data = pd.DataFrame(data_)                             #Data that is going to graph
         #self.partido = partido
-        self.cuenta = self.data.groupby([str(col_gr)]).count()      #Group by and filtter applied
-        self.cuenta = self.cuenta.reset_index()                     
+        #self.cuenta = self.data.groupby([str(col_gr)]).count()      #Group by and filtter applied
+        #self.cuenta = self.cuenta.reset_index()     
+        self.cuenta = self.data
         self.x = x                                                  #column of data that its going to be x-axis of graph
         self.y = y                                                  #column of data that its going to be y-axis of graph
         #self.cuenta_partido = self.data.groupby(partido,["Genero"]).count()
@@ -48,12 +49,12 @@ class PlotsGroup1:
     def display(self):
         """Displays the card with label, kpi and a mini-plot from the data"""
         #print(type(self.data))
-
+        
         layout = html.Div(
             [
-             html.Div(self.label,className='kpi-label'),
+             html.Div(self.label,className='h6'),
              #html.H2(self.kpi,className='kpi-number d-flex justify-content-end '),
-             dcc.Graph(figure=PartPlots.figura(self),
+             dcc.Graph(figure=plotGroupone.figura(self),
              config={
                 'fillFrame': False,
                 'frameMargins':0

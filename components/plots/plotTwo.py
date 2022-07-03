@@ -3,17 +3,19 @@ import pandas as pd
 import dash_bootstrap_components as dbc
 import plotly.express as px
 
-class PlotsGroup1:
+class plotTwo:
     """ A class to represent plot"""
-    def __init__(self,label, data_, col_gr,x,y):
+    def __init__(self,label, data_,x,y,y2):
         """Constructs all the attributes for kpiplot class"""
         self.label = label                                          #Title of graph
-        self.data = pd.DataFrame(data_)                             #Data that is going to graph
+        self.data = data_                                          #Data that is going to graph
         #self.partido = partido
-        self.cuenta = self.data.groupby([str(col_gr)]).count()      #Group by and filtter applied
-        self.cuenta = self.cuenta.reset_index()                     
+        #self.cuenta = self.data.groupby([str(col_gr1),str(col_gr2)]).count()      #Group by and filtter applied
+        #self.cuenta = self.cuenta.reset_index()  
+        self.cuenta = pd.DataFrame(self.data)                   
         self.x = x                                                  #column of data that its going to be x-axis of graph
-        self.y = y                                                  #column of data that its going to be y-axis of graph
+        self.y = y
+        self.y2 = y2
         #self.cuenta_partido = self.data.groupby(partido,["Genero"]).count()
     
     #@staticmethod
@@ -37,23 +39,22 @@ class PlotsGroup1:
         '''
         #print(self.cuenta)
         #Create figure with specifics
-        fig = px.bar(self.cuenta, x=str(self.x), y=str(self.y),color_discrete_sequence=px.colors.qualitative.Set2,)
+        #print(self.cuenta)
+        fig = px.bar(self.cuenta, x=str(self.x), y=[str(self.y),str(self.y2)],barmode='group',color_discrete_sequence=px.colors.qualitative.Set2,)
         #datadict = [dict(x=self.cuenta,type='bar')]
         
-        
-
         return fig
 
 
     def display(self):
         """Displays the card with label, kpi and a mini-plot from the data"""
         #print(type(self.data))
-
+        
         layout = html.Div(
             [
-             html.Div(self.label,className='kpi-label'),
+             html.Div(self.label,className='h6'),
              #html.H2(self.kpi,className='kpi-number d-flex justify-content-end '),
-             dcc.Graph(figure=PartPlots.figura(self),
+             dcc.Graph(figure=plotTwo.figura(self),
              config={
                 'fillFrame': False,
                 'frameMargins':0
