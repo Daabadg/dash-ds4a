@@ -12,17 +12,20 @@ from components.maps.mapcol_departamentos import mapcol_departamentos
 
 from components.maps.mapsample import mapsample
 from data.dataframes.database import listaPartidos
-from components.plots.PartPlots import PartPlots
+from data.dataframes.database import conteoProcesos
+from components.plots.plotGroupone import plotGroupone
 from components.sampledf.model import df_maptest
 from components.table.table import table
 from components.kpi.kpibadge import kpibadge
+from components.plots.piechart import piechart
 
-kpi1 = kpibadge('1500', 'Departamento con mas procesos', 'Bogota')
 
+kpi1 = kpibadge('325', 'Total kpi', 'Danger')
 
 mapa_colombia_departamentos = mapcol_departamentos('Mapa Departamentos Colombia', 'div_municipios_fig2',df_maptest)
 
-imgPartido = PartPlots('Procesos por partido', listaPartidos,'PACTO HISTORICO')
+imgPartido = plotGroupone('Procesos por partido', conteoProcesos,'PARTIDO','PARTIDO','CANTIDAD_PROCESOS_PUBLICOS')
+pieGenero = piechart('Cantidad de senadores por partido',listaPartidos,'ALIANZA VERDE')
 
 layout= html.Div(
     [
@@ -65,6 +68,7 @@ layout= html.Div(
             dbc.Col([
                 dbc.Row(html.Div(id="tag-senadores")),
                 dbc.Row(html.Div(id="tag-casos")),
+                pieGenero.display()
         ]),dbc.Col([
                     imgPartido.display()   
         ],id="plot-part"),
@@ -94,6 +98,7 @@ def partyMembers(partido):
     kpi = kpibadge(cuenta, 'No. Senadores', 'success')
     return [kpi.display()]
 
+'''
 @callback(
 Output("plot-part","children"),
 Input("id_selector_partido","value")
@@ -106,4 +111,4 @@ def update_plot(partido):
         nuevo_plot = imgPartido.display()
         #mapa_filtrado = mapcol_departamentos('Mapa Filtrado', 'id_filtrado', df_filtrado )
         #nuevo_mapa = mapa_filtrado.display()
-        return [nuevo_plot]
+        return [nuevo_plot] '''
