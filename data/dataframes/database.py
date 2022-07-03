@@ -13,6 +13,20 @@ config = {
     'database': 'DS4A'
 }
 conn = mysql.connector.connect(**config)
+
 listaPartidos = pd.read_sql_query("""
 SELECT * FROM DATA_SENADORES_PARTIDO_EXPORT 
+""",conn)
+
+conteoProcesos = pd.read_sql_query("""
+SELECT * FROM VW_PERSON_CONTEO_DE_PROCESOS
+""",conn)
+
+personaProcesosTipo = pd.read_sql_query("""
+SELECT * FROM VW_PERSONA_PROCESO_TIPO_SUJETO
+""",conn)
+
+
+personaProcesosDepartamento = pd.read_sql_query("""
+SELECT	* FROM 	VW_SENADORES_DEPARTAMENTO_CONTEO_DE_CASOS;
 """,conn)
