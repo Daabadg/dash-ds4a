@@ -19,26 +19,23 @@ class barPlots:
     
     #@staticmethod
     def figura(self):
-        '''
-        datadict = [dict(x=self.cuenta.Senadores,type='histogram')]
+    
         layout = dict(
             autosize=True,
             margin=dict(l=1, r=0, t=0, b=0, pad=0),
-            height=120,
+            #height=120,
             plot_bgcolor='rgba(0,0,0,0)',
-            yaxis_visible=False,
+            #yaxis_visible=False,
             yaxis_showticklabels=False,
             xaxis=dict(
                 title='',
-                type='linear'
             ),
         )
-        
-        fig=dict(data=datadict,layout=layout)
-        '''
+       
         #print(self.cuenta)
         df = self.data[self.data['PARTIDO'] == self.partido]
         fig = px.bar(df, x=self.x, y=self.y)
+        fig.update_layout(layout)
         
         return fig
 
@@ -52,6 +49,6 @@ class barPlots:
              #html.Div(self.label,className='bar-plot'),
              #html.H2(self.kpi,className='kpi-number d-flex justify-content-end '),
              dcc.Graph(figure=barPlots.figura(self)),
-            ],className='card'
+            ],#className='card'
         )
         return layout

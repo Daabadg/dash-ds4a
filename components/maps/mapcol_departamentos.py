@@ -39,7 +39,7 @@ class mapcol_departamentos:
             geojson=departamentos, 
             locations=self.df.COD_DPTO, 
             z=self.df['COUNT'],
-            colorscale="dense",
+            colorscale="emrld",
             text=self.df.DEPARTAMENTO,
             marker_opacity=0.9, 
             marker_line_width=0.5,
@@ -84,7 +84,7 @@ class mapcol_departamentos:
                     dcc.Graph(figure=mapcol_departamentos.figura(self), id=self.id)
                 ])
                 
-            ],className='card'
+            ],className='card m-0'
         )
         return layout
             

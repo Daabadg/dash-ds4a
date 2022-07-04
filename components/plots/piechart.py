@@ -65,6 +65,6 @@ class piechart:
                 'frameMargins':0
              },
              ),
-            ],className='card'
+            ]#,className='card'
         )
         return layout

@@ -90,13 +90,14 @@ layout= html.Div(
             dbc.Col([
                 dbc.Row([
                     html.Div(id="plot-part")
-                    ]),
+                    ],#className="h-75"
+                    ),
                 dbc.Row([
                     dbc.Col([
                         button_group_par
                         ],md=9)
                         ],justify = 'center')
-                        ],width=4),
+                        ],width=4,className='card m-0'),
             dbc.Col([
                     html.Div(id="map-partidos")  
                 ],width=6)
