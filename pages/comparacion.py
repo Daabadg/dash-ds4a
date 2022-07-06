@@ -206,9 +206,12 @@ def update_plot(senador1,senador2,btn1,btn2):
     if 'btt_deptoC' in changed_id:
         imgProcDepto = plotTwoxTwo('Procesos por partido', personaProcesosDepartamentoC,senador1,senador2,'DEPARTAMENTO','Total procesos','PERSON_NAME')
         nuevo_plot = imgProcDepto.display()
-    elif 'btt_Tiempoc' in changed_id:
-        print('Se presiono tiempo')
+    elif 'btt_TiempoC' in changed_id:
         
+        filt2 = personProcesoDetailsC.query("PERSON_NAME == '"+str(senador1)+ "' | PERSON_NAME == '"+ str(senador2)+"'")
+        
+        imgTiempo = serieDeTiempoTwo('Procesos',filt2,'FECHA_PROCESO','PERSON_NAME')
+        nuevo_plot = imgTiempo.display()
     else:
         imgProcDepto = plotTwoxTwo('Procesos por partido', personaProcesosDepartamentoC,senador1,senador2,'DEPARTAMENTO','Total procesos','PERSON_NAME')
         nuevo_plot = imgProcDepto.display()

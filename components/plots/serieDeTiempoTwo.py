@@ -9,40 +9,25 @@ class serieDeTiempoTwo:
         """Constructs all the attributes for kpiplot class"""
         self.label = label                                          #Title of graph
         self.data = pd.DataFrame(data_)                             #Data that is going to graph
-        #self.partido = partido
         self.data['fecha_Mes'] = pd.to_datetime(self.data[str(fecha)]).dt.to_period(freq = 'M')
-        self.cuenta = self.data.groupby(['fecha_Mes']).count()     #Group by and filtter applied
+        self.cuenta = self.data.groupby(['fecha_Mes','PERSON_NAME']).count() 
+        self.cuenta.reset_index(inplace = True)
+        self.cuenta['fecha_Mes'] = self.cuenta['fecha_Mes'].astype(str)
+
         self.color = color
     
-        #self.filt = self.cuenta[self.cuenta['Partido']==str(partido)]
-        #elf.filt.replace(to_replace =["M", "F"], value =["Masculino","Femenino"],inplace=True)
-        #self.cuenta_partido = self.data.groupby(partido,["Genero"]).count()
-    
+ 
     #@staticmethod
     def figura(self):
-        '''
-        datadict = [dict(x=self.cuenta.Senadores,type='histogram')]
-        layout = dict(
-            autosize=True,
-            margin=dict(l=1, r=0, t=0, b=0, pad=0),
-            height=120,
-            plot_bgcolor='rgba(0,0,0,0)',
-            yaxis_visible=False,
-            yaxis_showticklabels=False,
-            xaxis=dict(
-                title='',
-                type='linear'
-            ),
-        )
         
-        fig=dict(data=datadict,layout=layout)
-        '''
-        #print(self.cuenta)
         #Create figure with specifics
-        fig = px.line(self.cuenta, x=self.cuenta.index.to_timestamp(), y='ID_PROCESO',color_discrete_sequence=px.colors.qualitative.Set2,color=self.color)
-        #datadict = [dict(x=self.cuenta,type='bar')]
-        
-        
+        fig = px.line(self.cuenta, x=self.cuenta['fecha_Mes'], y='ID_PROCESO',color_discrete_sequence=px.colors.qualitative.Set2,color=self.color)
+        fig.update_layout(legend=dict(
+            yanchor="top",
+            y=1,
+            xanchor="right",
+            x=1
+        ))
 
         return fig
 
@@ -54,7 +39,6 @@ class serieDeTiempoTwo:
         layout = html.Div(
             [
              html.Div(self.label,className='h6'),
-             #html.H2(self.kpi,className='kpi-number d-flex justify-content-end '),
              dcc.Graph(figure=serieDeTiempoTwo.figura(self),
              config={
                 'fillFrame': False,
