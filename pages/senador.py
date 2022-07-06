@@ -82,7 +82,7 @@ layout = dbc.Container(
                     html.Div([
                         html.Div(['Seleccione el senador'],className="mb-2 selector-label"),
                         dcc.Dropdown(
-                        id="id_selector_senadorS",multi=False, placeholder="Senador"
+                        id="id_selector_senadorS",multi=False,value='GUSTAVO BOLIVAR MORENO', placeholder="Senador"
                         )
                     ])
                 ])

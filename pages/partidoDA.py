@@ -13,7 +13,7 @@ register_page(__name__, path="/partido")
 from components.maps.mapcol_departamentos import mapcol_departamentos
 
 from data.dataframes.databaseDA import listaPartidos,conteoProcesos,depPartidos
-from components.plots.PartPlots import PartPlots
+# from components.plots.PartPlots import PartPlots
 from components.plots.piechartDA import piechart
 from components.kpi.kpibadge import kpibadge
 from components.plots.barPlotsDA import barPlots
