@@ -17,6 +17,7 @@ from data.dataframes.databaseDA import listaPartidos,conteoProcesos,depPartidos
 from components.plots.piechartDA import piechart
 from components.kpi.kpibadge import kpibadge
 from components.plots.barPlotsDA import barPlots
+from components.cardImg.cardImgDA import cardImgPartido
 
 # PIECHART POR GENERO
 pieGenero = piechart("Genero",listaPartidos,"PACTO HISTORICO")
@@ -65,25 +66,12 @@ layout= html.Div(
                         )
                     ])
                 ]),
-                dbc.Col([
-                    html.Div([
-                        html.Div(['Seleccione el senador'],className="mb-2 selector-label"),
-                        dcc.Dropdown(
-                        id="id_selector_senador",value='GUSTAVO BOLIVAR MORENO',multi=False, placeholder="Senador"
-                        )
-                    ])
-                ])
-            ]),
-            dbc.Row([
-                dbc.Col([
-                    dbc.Button([
-                        'Filtrar'
-                    ],id="id_filtrar")
-                ],class_name="d-flex justify-content-end mt-2"),
-            ]),
+
+            ]),         
         ],className="card"),
         dbc.Row([
             dbc.Col([
+                dbc.Row(html.Div(id="img-partido")),
                 dbc.Row(html.Div(id="tag-senadores")),
                 dbc.Row(html.Div(id="tag-registros")),
         ],width=2),
@@ -117,12 +105,14 @@ def senator_dropdown(partido):
 # Callback para el conteo de senadores por partido
 @callback(
     Output("tag-senadores","children"),
+    Output("img-partido","children"),
     Input("id_selector_partido","value")
 )
 def partyMembers(partido):
     cuenta = listaPartidos[listaPartidos['Partido']==partido]['Senadores'].count()
     kpi = kpibadge(cuenta, 'No. Senadores', 'success')
-    return [kpi.display()]
+    imgPar = cardImgPartido(partido,partido)
+    return kpi.display(),imgPar.display()
 
 # Callback para el conteo de registros por partido
 @callback(
@@ -135,6 +125,7 @@ def regCount(partido:str):
     cuenta = sum(cuenta)
     kpi = kpibadge(cuenta, 'No. Procesos', 'success')
     return [kpi.display()]
+
 
 # Callback para el mapa
 @callback(
