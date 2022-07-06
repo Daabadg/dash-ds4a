@@ -22,11 +22,9 @@ conteoProcesos = pd.read_sql_query("""
 SELECT * FROM VW_PERSON_CONTEO_DE_PROCESOS
 """,conn)
 
-personaProcesosTipo = pd.read_sql_query("""
-SELECT * FROM VW_PERSONA_PROCESO_TIPO_SUJETO
+depPartidos = pd.read_sql_query("""
+SELECT * FROM VW_PARTIDO_DEPARTAMENTO_CONTEO_DE_CASOS
 """,conn)
+depPartidos = depPartidos.rename(columns={"CODIGO_DEPARTAMENTO":"COD_DPTO"})
+depPartidos['COUNT'] = depPartidos['CANTIDAD_PROCESOS_PUBLICOS']+depPartidos['CANTIDAD_PROCESOS_PRIVADOS']
 
-
-personaProcesosDepartamento = pd.read_sql_query("""
-SELECT	* FROM 	VW_SENADORES_DEPARTAMENTO_CONTEO_DE_CASOS;
-""",conn)
