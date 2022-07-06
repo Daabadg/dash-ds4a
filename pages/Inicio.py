@@ -8,7 +8,7 @@ from components.kpi.kpiplot import kpiplot
 from components.table.table import table
 from components.sampledf.model import df_costos
 from components.maps.mapsample import mapsample
-from data.dataframes.database import listaPartidos
+from data.dataframes.databaseDA import listaPartidos
 from components.plots.PartPlots import PartPlots
 from components.kpi.kpibadgeAMD import kpibadgeAMD
 
