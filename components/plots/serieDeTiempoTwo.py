@@ -3,18 +3,19 @@ import pandas as pd
 import dash_bootstrap_components as dbc
 import plotly.express as px
 
-class plotGroupone:
+class serieDeTiempoTwo:
     """ A class to represent plot"""
-    def __init__(self,label, data_, col_gr,x,y):
+    def __init__(self,label, data_, fecha,color):
         """Constructs all the attributes for kpiplot class"""
         self.label = label                                          #Title of graph
         self.data = pd.DataFrame(data_)                             #Data that is going to graph
         #self.partido = partido
-        #self.cuenta = self.data.groupby([str(col_gr)]).count()      #Group by and filtter applied
-        #self.cuenta = self.cuenta.reset_index()     
-        self.cuenta = self.data
-        self.x = x                                                  #column of data that its going to be x-axis of graph
-        self.y = y                                                  #column of data that its going to be y-axis of graph
+        self.data['fecha_Mes'] = pd.to_datetime(self.data[str(fecha)]).dt.to_period(freq = 'M')
+        self.cuenta = self.data.groupby(['fecha_Mes']).count()     #Group by and filtter applied
+        self.color = color
+    
+        #self.filt = self.cuenta[self.cuenta['Partido']==str(partido)]
+        #elf.filt.replace(to_replace =["M", "F"], value =["Masculino","Femenino"],inplace=True)
         #self.cuenta_partido = self.data.groupby(partido,["Genero"]).count()
     
     #@staticmethod
@@ -38,8 +39,7 @@ class plotGroupone:
         '''
         #print(self.cuenta)
         #Create figure with specifics
-        fig = px.bar(self.cuenta, x=str(self.x), y=str(self.y),color_discrete_sequence=px.colors.qualitative.Set2,)
-        fig.update_xaxes(showticklabels=False)
+        fig = px.line(self.cuenta, x=self.cuenta.index.to_timestamp(), y='ID_PROCESO',color_discrete_sequence=px.colors.qualitative.Set2,color=self.color)
         #datadict = [dict(x=self.cuenta,type='bar')]
         
         
@@ -55,7 +55,7 @@ class plotGroupone:
             [
              html.Div(self.label,className='h6'),
              #html.H2(self.kpi,className='kpi-number d-flex justify-content-end '),
-             dcc.Graph(figure=plotGroupone.figura(self),
+             dcc.Graph(figure=serieDeTiempoTwo.figura(self),
              config={
                 'fillFrame': False,
                 'frameMargins':0

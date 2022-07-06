@@ -13,6 +13,11 @@ from components.cardImg.cardImgNosotros import cardImgNos
 #cardSen = cardImg("AIDA MARINA QUILCUE VIVAS", "AIDA MARINA QUILCUE VIVAS")
 
 AMD = cardImgNos('Andrea Martinez Diaz', 'Ingeniera Mecatronica', 'llll')
+JPVP = cardImgNos('Johan Pool Valero Perez', 'Ingeniero de sistemas', 'Data Engineer apassionate by the Big data and the Machine Learning. Vampire hunter in free time. De Santa Marta, Magdalena, Colombia')
+DAAG = cardImgNos('Diego Alejandro Abad Gómez', 'Mechanical Engineer', 'llll')
+JFMA = cardImgNos('Juan Fernando Montoya Agudelo', 'no dijo', 'llll')
+EMJ = cardImgNos('Elquis Manjarrés Jiménez  ', 'Master in Applied Statistics with experience in Metrology.', 'Chemical Engineer with experience in transformation and production through physical, chemical and biochemical processes and services.')
+
 
 layout = dbc.Container(
     [
@@ -26,16 +31,20 @@ layout = dbc.Container(
                AMD.display()
             ]),
             dbc.Col([
-               AMD.display()
+               JPVP.display()
             ]),
             dbc.Col([
-               AMD.display()
+               DAAG.display()
             ])
             ,dbc.Col([
-               AMD.display()
+               JFMA.display()
             ]),
             dbc.Col([
-               AMD.display()
+               EMJ
+               .display()
+            ]),
+            dbc.Col([
+               JFMA.display()
             ]),
         ]),
     

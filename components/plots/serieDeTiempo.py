@@ -10,9 +10,9 @@ class serieDeTiempo:
         self.label = label                                          #Title of graph
         self.data = pd.DataFrame(data_)                             #Data that is going to graph
         #self.partido = partido
-        self.data['fecha_Mes'] = pd.to_datetime(self.data[str(fecha)], format = '%m/%d/%Y').dt.to_period(freq = 'M')
+        self.data['fecha_Mes'] = pd.to_datetime(self.data[str(fecha)]).dt.to_period(freq = 'M')
         self.cuenta = self.data.groupby(['fecha_Mes']).count()     #Group by and filtter applied
-        self.cuenta = self.cuenta.reset_index() 
+         
     
         #self.filt = self.cuenta[self.cuenta['Partido']==str(partido)]
         #elf.filt.replace(to_replace =["M", "F"], value =["Masculino","Femenino"],inplace=True)
@@ -39,7 +39,7 @@ class serieDeTiempo:
         '''
         #print(self.cuenta)
         #Create figure with specifics
-        fig = px.line(self.cuenta, x='fecha_Mes', y=['CANTIDAD_PROCESOS_PUBLICOS','CANTIDAD_PROCESOS_PRIVADOS'],color_discrete_sequence=px.colors.qualitative.Set2,)
+        fig = px.line(self.cuenta, x=self.cuenta.index.to_timestamp(), y='ID_PROCESO',color_discrete_sequence=px.colors.qualitative.Set2)
         #datadict = [dict(x=self.cuenta,type='bar')]
         
         

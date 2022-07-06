@@ -30,3 +30,7 @@ SELECT * FROM VW_PERSONA_PROCESO_TIPO_SUJETO
 personaProcesosDepartamento = pd.read_sql_query("""
 SELECT	* FROM 	VW_SENADORES_DEPARTAMENTO_CONTEO_DE_CASOS;
 """,conn)
+
+personProcesoDetails = pd.read_sql_query("""
+SELECT	* FROM 	VW_PERSON_PROCESO_DETAILS;
+""",conn)
