@@ -3,7 +3,7 @@ from dash_labs.plugins.pages import register_page
 
 register_page(__name__, path="/senador")
 
-from dash import  dcc, html, Input, Output, callback
+from dash import  dcc, html, Input, Output, callback, State
 import plotly.express as px
 import pandas as pd
 
@@ -38,7 +38,6 @@ PersonProcDepto = personaProcesosDepartamento[personaProcesosDepartamento['PERSO
 #Senador = "AIDA MARINA QUILCUE VIVAS"
 #TotalSen, TotalPart, TotalDemandado, TotalDemandante = GetInfoSen(conteoProcesos, SumaPartido, SumaTipoProseco, Senador)
 
-imgDepartamento = plotTwo('Procesos por partido', PersonProcDepto,'DEPARTAMENTO','CANTIDAD_PROCESOS_PUBLICOS','CANTIDAD_PROCESOS_PRIVADOS')
 
 #Llamado de componentes
 #cardSen = cardImg("AIDA MARINA QUILCUE VIVAS", "AIDA MARINA QUILCUE VIVAS")
@@ -74,7 +73,8 @@ layout = dbc.Container(
                         id="id_selector_partidoS",
                         options=[
                             {"label": i, "value": i} for i in listaPartidos.Partido.unique()
-                        ],multi=False, placeholder="Partido"
+                        ],value='PACTO HISTORICO'
+                        ,multi=False, placeholder="Partido"
                         )
                     ])
                 ]),
@@ -106,9 +106,7 @@ layout = dbc.Container(
                 ],md=6)
             ], className='h-5'),
             dbc.Row([
-                html.Div([
-                    imgDepartamento.display()
-                ],id='graficacentral'),            
+                html.Div(id="graficacentral"),           
                 ],justify = 'center'),
             dbc.Row([
                 dbc.Col([
@@ -158,13 +156,29 @@ def actKPI(senador):
     
     kpi1 = kpibadgeAMDsencilla(str(cuentaSen), 'Total casos')
     kpi2 = kpibadgeAMDsencilla(str(round((cuentaSen*100)/cuentaPar,2)), '% Casos del partido')
-    kpi3 = kpibadgeAMDsencilla(str(cuentaDemandado), 'Casos como demandado')
-    kpi4 = kpibadgeAMDsencilla(str(cuentaDemandante), 'Casos como demandante')
+    kpi3 = kpibadgeAMDsencilla(str(cuentaDemandado), 'Procesos como demandado')
+    kpi4 = kpibadgeAMDsencilla(str(cuentaDemandante), 'Procesos como demandante')
     cardSen = cardImg(senador, senador,partido,descripcion)
 
     PersonProcDepto = personaProcesosDepartamento[personaProcesosDepartamento['PERSON_NAME']==senador]
-    imgDepartamento.data = PersonProcDepto
-    
-            
+    imgDepartamento = plotTwo('Procesos por partido', PersonProcDepto,'DEPARTAMENTO','CANTIDAD_PROCESOS_PUBLICOS','CANTIDAD_PROCESOS_PRIVADOS')
 
     return kpi1.display(), kpi2.display(), kpi3.display(), kpi4.display(), cardSen.display(), imgDepartamento.display()
+
+'''
+@callback(
+        [Output("graficacentral", 'children')], 
+        [State("id_selector_senadorS","value"),
+         Input("btt_casos", "n_clicks"),
+                
+        ],prevent_initial_call=True
+    )
+def update_map(selector_municipio,selector_year,nclicks):
+        df_filtrado = mapa_colombia_departamentos.df[mapa_colombia_departamentos.df['DEPARTAMENTO'].isin(selector_municipio)]
+        df_filtrado = df_filtrado[df_filtrado['COUNT']<(10**selector_year)]
+        mapa_colombia_departamentos.df = df_filtrado
+        nuevo_mapa = mapa_colombia_departamentos.display()
+        #mapa_filtrado = mapcol_departamentos('Mapa Filtrado', 'id_filtrado', df_filtrado )
+        #nuevo_mapa = mapa_filtrado.display()
+        return [nuevo_mapa]
+'''
