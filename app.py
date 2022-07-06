@@ -21,10 +21,10 @@ navbar = dbc.NavbarSimple(
     #dbc.NavItem(dbc.NavLink("Partido", href="/partido"))
     ],
 
-    brand="DS4A Project - Team 134",
+    brand="Transparencia Colombia",
     color="primary",
     dark=True,
-    className="mb-2",
+    className="text-center mb-2",
 )
 
 
@@ -38,7 +38,7 @@ button_group = dbc.ButtonGroup(
                 ],id="btt_partido",  href="/partido"),
         dbc.Button([
                     'Comparar'
-                ],id="btt_comparar",  href="/partido"),
+                ],id="btt_comparar",  href="/comparacion"),
     ],
     vertical=True,
 )
@@ -51,10 +51,10 @@ app.layout = dbc.Container(
         dbc.Row([
             dbc.Col([
                 button_group
-            ], md=2, lg=1),  
+            ], md=1, lg=1),  
             dbc.Col([
                 dl.plugins.page_container,
-            ], md=10, lg=11),
+            ], md=11, lg=11),
         ]),
     
 
