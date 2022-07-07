@@ -12,6 +12,7 @@ from data.dataframes.database import conteoProcesos
 from data.dataframes.database import personaProcesosTipo
 from data.dataframes.database import personaProcesosDepartamento
 from data.dataframes.database import personProcesoDetails
+from data.dataframes.dbsenadores import infoSenadores
 
 
 
@@ -145,11 +146,11 @@ layout=  dbc.Container(
             ],md=3),
         ]),
 
-        dbc.Row([
-            dbc.Col([
-                tablaventas.display()
-            ], className='card')
-        ])
+        #dbc.Row([
+         #   dbc.Col([
+          #      tablaventas.display()
+           # ], className='card')
+        #])
         
       
     ]
@@ -173,12 +174,12 @@ def update_map(senador1,senador2,nclicks):
     Sen1proc = conteoProcesosC[conteoProcesosC["PERSON_NAME"] == senador1]
     cuentaSen1 = int(Sen1proc.iloc[0]['CANTIDAD_PROCESOS_PUBLICOS']) + Sen1proc.iloc[0]['CANTIDAD_PROCESOS_PRIVADOS']
     partido1 = Sen1proc.iloc[0]['PARTIDO']
-    descripcion1 = 'Es un escritor, empresario, periodista, guionista y político colombiano,'
+    descripcion1 = infoSenadores[infoSenadores['Senadores'] == senador1]['Descripcion'].iloc[0]
 
     Sen2proc = conteoProcesosC[conteoProcesosC["PERSON_NAME"] == senador2]
     cuentaSen2 = int(Sen2proc.iloc[0]['CANTIDAD_PROCESOS_PUBLICOS']) + Sen2proc.iloc[0]['CANTIDAD_PROCESOS_PRIVADOS']
     partido2 = Sen2proc.iloc[0]['PARTIDO']
-    descripcion2 = 'Es un escritor, empresario, periodista, guionista y político colombiano,'
+    descripcion2 = infoSenadores[infoSenadores['Senadores'] == senador2]['Descripcion'].iloc[0]
     
     cardSen1 = cardImg(senador1, senador1,partido1,descripcion1)
     cardSen2 = cardImg(senador2, senador2,partido2,descripcion2)

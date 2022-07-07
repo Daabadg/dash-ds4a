@@ -6,6 +6,8 @@ import dash_bootstrap_components as dbc
 from dash_labs.plugins.pages import register_page
 from dash import html , dcc, callback, Input, Output, State, callback_context
 from sklearn.feature_extraction import img_to_graph
+import plotly.express as px
+
 
 # dash-labs plugin call, menu name and route
 register_page(__name__, path="/partido")
@@ -13,11 +15,13 @@ register_page(__name__, path="/partido")
 from components.maps.mapcol_departamentos import mapcol_departamentos
 
 from data.dataframes.databaseDA import listaPartidos,conteoProcesos,depPartidos
+from data.dataframes.dbsenadores import infoSenadores
 # from components.plots.PartPlots import PartPlots
 from components.plots.piechartDA import piechart
 from components.kpi.kpibadge import kpibadge
 from components.plots.barPlotsDA import barPlots
 from components.cardImg.cardImgDA import cardImgPartido
+from components.plots.edadPlot import edadHist
 
 # PIECHART POR GENERO
 pieGenero = piechart("Genero",listaPartidos,"PACTO HISTORICO")
@@ -28,6 +32,8 @@ barDepartamento = barPlots("Departamentos",depPartidos,"PACTO HISTORICO","DEPART
 # MAPA COLOMBIA
 mapa_colombia_departamentos = mapcol_departamentos('Mapa Departamentos Colombia', 'div_municipios_fig2',depPartidos)
 
+#HISTOGRAMA EDADES
+edades = edadHist(infoSenadores,"PACTO HISTORICO")
 
 #imgPartido = PartPlots('Procesos por partido', listaPartidos,'PACTO HISTORICO')
 
@@ -156,13 +162,15 @@ def update_plot(partido,btn1,btn2,btn3):
         pieGenero.partido = partido
         nuevo_plot = pieGenero.display()
     elif 'btt_edad' in changed_id:
-        print('Button 2 was most recently clicked')
+        edades.partido = partido
+        nuevo_plot = edades.display()
     elif 'btt_dpto' in changed_id:
         barDepartamento.partido = partido
         nuevo_plot = barDepartamento.display()
     else:
         pieGenero.partido = partido
         nuevo_plot = pieGenero.display()
+
     return [nuevo_plot]
 
 # Boton de departamento

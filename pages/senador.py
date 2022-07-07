@@ -12,6 +12,7 @@ from data.dataframes.database import conteoProcesos
 from data.dataframes.database import personaProcesosTipo
 from data.dataframes.database import personaProcesosDepartamento
 from data.dataframes.database import personProcesoDetails
+from data.dataframes.dbsenadores import infoSenadores
 
 
 from components.maps.mapsample import mapsample
@@ -90,7 +91,14 @@ layout = dbc.Container(
                         id="id_selector_senadorS",value='GUSTAVO BOLIVAR MORENO',multi=False, placeholder="Senador"
                         )
                     ])
-                ])
+                ]),
+            ]),
+            dbc.Row([
+                dbc.Col([
+                    dbc.Button([
+                        'Filtrar'
+                    ],id="id_filtrarS")
+                ],class_name="d-flex justify-content-end mt-2"),
             ]),
         ],className="card"),
     dbc.Row([
@@ -144,9 +152,10 @@ def senator_dropdown(partido):
     Output("kpi-demandado","children"),
     Output("kpi-demandante","children"),
     Output("Card-Img","children"),
-    Input("id_selector_senadorS","value")
+    State("id_selector_senadorS","value"),
+    Input("id_filtrarS", "n_clicks"),
 )
-def actKPI(senador):
+def actKPI(senador,nclicks):
     Senproc = conteoProcesosC[conteoProcesosC["PERSON_NAME"] == senador]
     cuentaSen = int(Senproc.iloc[0]['CANTIDAD_PROCESOS_PUBLICOS']) + Senproc.iloc[0]['CANTIDAD_PROCESOS_PRIVADOS']
     Partproc = SumaPartido[SumaPartido['PARTIDO']==Senproc.iloc[0]['PARTIDO']]
@@ -155,7 +164,9 @@ def actKPI(senador):
     cuentaDemandado = SenprocTipo.iloc[0]['ES_DEMANDADO']
     cuentaDemandante = SenprocTipo.iloc[0]['ES_DEMANDANTE']
     partido = Senproc.iloc[0]['PARTIDO']
-    descripcion = 'Es un escritor, empresario, periodista, guionista y político colombiano,'
+    #descripcion = 'Es un escritor, empresario, periodista, guionista y político colombiano,'
+    descripcion = infoSenadores[infoSenadores['Senadores'] == senador]['Descripcion'].iloc[0]
+    
 
     
     kpi1 = kpibadgeAMDsencilla(str(cuentaSen), 'Total casos')
@@ -171,12 +182,13 @@ def actKPI(senador):
 
 @callback(
 Output("graficacentral","children"),
-Input("id_selector_senadorS","value"),
+State("id_selector_senadorS","value"),
 Input("btt_casos","n_clicks"),
 Input("btt_depto","n_clicks"),
-Input("btt_Tiempo","n_clicks")
+Input("btt_Tiempo","n_clicks"),
+Input("id_filtrarS", "n_clicks"),
 )
-def update_plot(senador,btn1,btn2,btn3):
+def update_plot(senador,btn1,btn2,btn3,nclicks):
     
     changed_id = [p['prop_id'] for p in callback_context.triggered][0]
     if 'btt_casos' in changed_id:

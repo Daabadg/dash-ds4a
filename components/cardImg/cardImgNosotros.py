@@ -5,12 +5,13 @@ import plotly.express as px
 
 class cardImgNos:
     """ A class to show a card with image"""
-    def __init__(self, name, profesion, descripcion):
+    def __init__(self, name, profesion, descripcion,linkedin):
         """Constructs all the attributes for kpiplot class"""                                         #Title of graph
         self.name = name                            #Data that is going to graph
         self.path = 'assets\ImgNos\\' + str(name) +'.jpg'
         self.profesion = profesion
         self.descripcion = descripcion
+        self.linkedin = linkedin
         
 
     def display(self):
@@ -24,6 +25,13 @@ class cardImgNos:
                             html.H4(self.name, className="card-title"),
                             html.P(self.profesion,className="card-text",),
                             html.P(self.descripcion,className="card-text",),
+                            dbc.Button(
+                                    "Linkedin",
+                                    id="link-centered", 
+                                    className="ml-auto",
+                                    href=self.linkedin,
+                                    target="_blank"
+                                )
                         ]
                     ),
                 ]

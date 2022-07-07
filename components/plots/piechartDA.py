@@ -8,7 +8,7 @@ class piechart:
     def __init__(self,label, data_, partido):
         """Constructs all the attributes for kpiplot class"""
         self.label = label                                          #Title of graph
-        self.data = pd.DataFrame(data_)                             #Data that is going to graph
+        self.data = data_                           #Data that is going to graph
         #self.partido = partido
         self.cuenta = self.data.groupby(['Partido','Genero']).count()     #Group by and filtter applied
         self.cuenta = self.cuenta.reset_index() 
@@ -37,7 +37,7 @@ class piechart:
         fig=dict(data=datadict,layout=layout)
         '''
 
-        filt = self.cuenta[self.cuenta['Partido'] == str(self.partido)]
+        filt = self.cuenta[self.cuenta['Partido'] == str(self.partido)].copy()
         filt.replace(to_replace =["M", "F"], value =["Masculino","Femenino"],inplace=True)
         fig = px.pie(filt, names=filt['Genero'], values=filt['Senadores'],color_discrete_sequence=px.colors.qualitative.Set2)
 
