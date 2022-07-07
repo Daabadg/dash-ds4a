@@ -37,8 +37,8 @@ layout = dbc.Container(
             ]),
             dbc.Col([
                DAAG.display()
-            ])
-            ,dbc.Col([
+            ]),
+            dbc.Col([
                JFMA.display()
             ]),
             dbc.Col([

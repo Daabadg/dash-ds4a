@@ -4,7 +4,7 @@ import dash_labs as dl
 import dash_bootstrap_components as dbc
 
 from callbacks import register_callbacks
-
+from dash import html
 # Dash instance declaration
 app = dash.Dash(
     __name__, plugins=[dl.plugins.pages], external_stylesheets=[dbc.themes.MINTY], update_title='Cargando...'
@@ -15,11 +15,11 @@ app.config.suppress_callback_exceptions=True
 #Top menu, items get from all pages registered with plugin.pages
 navbar = dbc.NavbarSimple(
     [
+        #html.Img(src='assets\ImgNos\logo.jpg', height="50px"),
+        dbc.NavItem(dbc.NavLink("Inicio", href="/")),
+        dbc.NavItem(dbc.NavLink( "Nosotros", href="/nosotros")),
+     ],
     
-    dbc.NavItem(dbc.NavLink("Inicio", href="/")),
-    dbc.NavItem(dbc.NavLink( "Nosotros", href="/nosotros")),
-    #dbc.NavItem(dbc.NavLink("Partido", href="/partido"))
-    ],
 
     brand="Transparencia Colombia",
     color="primary",
@@ -39,6 +39,9 @@ button_group = dbc.ButtonGroup(
         dbc.Button([
                     'Comparar'
                 ],id="btt_comparar",  href="/comparacion"),
+        dbc.Button([
+                    'Modelo'
+                ],id="btt_modelo",  href="/modelo"),
     ],
     vertical=True,
 )
